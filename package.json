@@ -1,6 +1,6 @@
 {
   "name": "memoized-decorator",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Minimalistic memoization decorator",
   "main": "index.js",
   "scripts": {
@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/zyklus/memoized-decorator.git"
+    "url": "git+https://github.com/d9d/memoized-decorator.git"
   },
   "keywords": [
     "memoize",
@@ -21,7 +21,7 @@
   "author": "Mark Kahn <m@vouchr.com>",
   "license": "Unlicense",
   "bugs": {
-    "url": "https://github.com/zyklus/memoized-decorator/issues"
+    "url": "https://github.com/d9d/memoized-decorator/issues"
   },
-  "homepage": "https://github.com/zyklus/memoized-decorator#readme"
+  "homepage": "https://github.com/d9d/memoized-decorator#readme"
 }

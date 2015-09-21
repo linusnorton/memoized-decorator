@@ -1,10 +1,10 @@
 module.exports = function(target, key, descriptor) {
-  let cache = {};
-  let fn    = descriptor.value;
-  let char0 = String.fromCharCode(0);
+  var cache = {};
+  var fn    = descriptor.value;
+  var char0 = String.fromCharCode(0);
 
   descriptor.value = function(){
-    let keyAry = [];
+    var keyAry = [];
 
     for (let i=0, l=arguments.length; i<l; i++) {
       let arg  = arguments[i];
@@ -19,7 +19,7 @@ module.exports = function(target, key, descriptor) {
       );
     }
 
-    let key = keyAry.join(String.fromCharCode(0));
+    var key = keyAry.join(String.fromCharCode(0));
 
     return cache.hasOwnProperty(key) ? cache[key] : (cache[key] = fn.apply(this, arguments));
   };
