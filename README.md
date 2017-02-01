@@ -1,7 +1,6 @@
 # Memoized Decorator
 
-A minimilistic memoize decorator.  Written because the only other memoize
-  decorator I found in NPM didn't support arguments!
+A fork of [memoized-decorator](https://github.com/VoiceNGO/memoized-decorator) that takes class properties into consideration by attaching the memoization cache at the object level rather than class level. 
 
 Serializes arguments by `.toString()` or `JSON.strinigify` for objects literals
   & arrays.  `null` & `undefined` safe.
@@ -9,13 +8,13 @@ Serializes arguments by `.toString()` or `JSON.strinigify` for objects literals
 ## Installation
 
 ```sh
-npm install --save-dev memoized-decorator
+npm install --save memoized-class-decorator
 ```
 
 ## Usage
 
 ```js
-import memoize from 'memoized-decorator';
+import memoize from 'memoized-class-decorator';
 
 class Foo {
   @memoize

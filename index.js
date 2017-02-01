@@ -1,10 +1,13 @@
 module.exports = function(target, key, descriptor) {
-  var cache = {};
   var fn    = descriptor.value;
   var char0 = String.fromCharCode(0);
 
   descriptor.value = function(){
     var keyAry = [];
+
+    if (!this.hasOwnProperty("__memoized__")) {
+      this.__memoized__ = {};
+    }
 
     for (let i=0, l=arguments.length; i<l; i++) {
       let arg  = arguments[i];
@@ -21,7 +24,11 @@ module.exports = function(target, key, descriptor) {
 
     var key = keyAry.join(String.fromCharCode(0));
 
-    return cache.hasOwnProperty(key) ? cache[key] : (cache[key] = fn.apply(this, arguments));
+    if (!this.__memoized__.hasOwnProperty(key)) {
+        this.__memoized__[key] = fn.apply(this, arguments);
+    }
+
+    return this.__memoized__[key];
   };
 
   return descriptor;
