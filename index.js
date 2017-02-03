@@ -22,13 +22,13 @@ module.exports = function(target, key, descriptor) {
       );
     }
 
-    var key = keyAry.join(String.fromCharCode(0));
+    var cacheKey = key + keyAry.join(String.fromCharCode(0));
 
-    if (!this.__memoized__.hasOwnProperty(key)) {
-        this.__memoized__[key] = fn.apply(this, arguments);
+    if (!this.__memoized__.hasOwnProperty(cacheKey)) {
+        this.__memoized__[cacheKey] = fn.apply(this, arguments);
     }
 
-    return this.__memoized__[key];
+    return this.__memoized__[cacheKey];
   };
 
   return descriptor;
