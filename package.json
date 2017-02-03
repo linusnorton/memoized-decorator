@@ -1,6 +1,6 @@
 {
   "name": "memoized-class-decorator",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Minimalistic memoization decorator",
   "main": "index.js",
   "scripts": {
