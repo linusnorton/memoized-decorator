@@ -1,8 +1,9 @@
 module.exports = function(target, key, descriptor) {
-  var fn    = descriptor.value;
+  var type  = descriptor.get ? 'get' : 'value';
+  var fn    = descriptor[type];
   var char0 = String.fromCharCode(0);
 
-  descriptor.value = function(){
+  descriptor[type] = function(){
     var keyAry = [];
 
     if (!this.hasOwnProperty("__memoized__")) {
