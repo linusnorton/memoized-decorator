@@ -13,27 +13,28 @@ npm install --save memoized-class-decorator
 
 ## Usage
 
-```js
-import memoize from 'memoized-class-decorator';
+```typescript
+import memoize = require('memoized-class-decorator');
 
 class Foo {
 
-  constructor(private num: number) { }
+  constructor(private readonly num: number) { }
 
   @memoize
-  myMethod(add: number) {
+  public myMethod(add: number) {
     return this.num + add;
   }
 }
 
 const f1 = new Foo(5);
 
-f1.myMethod(5); //= 10 (method is invoked)
-f1.myMethod(5); //= 10 (method is not invoked)
+f1.myMethod(5);  //= 10 (method is invoked)
+f1.myMethod(10); //= 15 (method is invoked)
+f1.myMethod(5);  //= 10 (method is not invoked)
 
 const f2 = new Foo(0);
 
-f1.myMethod(5); //= 5 (method is invoked, each object has it's own cache)
+f2.myMethod(5);  //= 5 (method is invoked, each object has it's own cache)
 
 ```
 

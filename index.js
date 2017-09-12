@@ -5,10 +5,9 @@ module.exports = function(target, key, descriptor) {
 
   descriptor[fType] = function(){
     const keyAry = [];
+    const memoizedCache = Symbol.for('memoizedCache');
 
-    if (!this.hasOwnProperty("__memoized__")) {
-      this.__memoized__ = {};
-    }
+    this[memoizedCache] = this[memoizedCache] || {};
 
     for (let i=0, l=arguments.length; i<l; i++) {
       const arg  = arguments[i];
@@ -26,11 +25,11 @@ module.exports = function(target, key, descriptor) {
 
     const cacheKey = key + keyAry.join(String.fromCharCode(0));
 
-    if (!this.__memoized__.hasOwnProperty(cacheKey)) {
-        this.__memoized__[cacheKey] = fn.apply(this, arguments);
+    if (!this[memoizedCache].hasOwnProperty(cacheKey)) {
+      this[memoizedCache][cacheKey] = fn.apply(this, arguments);
     }
 
-    return this.__memoized__[cacheKey];
+    return this[memoizedCache][cacheKey];
   };
 
   return descriptor;
