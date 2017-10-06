@@ -14,11 +14,12 @@ module.exports = function(target, key, descriptor) {
       const type = typeof arg;
 
       keyAry.push(
-        (arg  === null)               ? char0 + 'null'      :
-        (arg  === void 0)             ? char0 + 'undefined' :
-        (type === 'function')         ? char0 + arg         :
-        (type === 'object' && arg.id) ? char0 + arg.id      :
-        (type === 'object')           ? char0 + JSON.stringify(arg) :
+        (arg  === null)                     ? char0 + 'null'              :
+        (arg  === void 0)                   ? char0 + 'undefined'         :
+        (type === 'function')               ? char0 + arg                 :
+        (type === 'object' && arg.id)       ? char0 + arg.id              :
+        (type === 'object' && arg.hashCode) ? char0 + arg.hashCode()      :
+        (type === 'object')                 ? char0 + JSON.stringify(arg) :
         arg
       );
     }
