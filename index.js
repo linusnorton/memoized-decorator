@@ -1,28 +1,13 @@
 
-function ObjectWithoutPrototypeCache () {
-  this.cache = Object.create(null);
-}
-
-ObjectWithoutPrototypeCache.prototype.has = function(key) {
-  return (key in this.cache);
-};
-
-ObjectWithoutPrototypeCache.prototype.get = function(key) {
-  return this.cache[key];
-};
-
-ObjectWithoutPrototypeCache.prototype.set = function(key, value) {
-  this.cache[key] = value;
-};
 
 module.exports = function(target, key, descriptor) {
-  const fType  = descriptor.get ? 'get' : 'value';
-  const fn    = descriptor[fType];
+  const fType = descriptor.get ? 'get' : 'value';
+  const fn = descriptor[fType];
   const char0 = String.fromCharCode(0);
   const memoizedCache = Symbol.for('memoizedCache');
-  target[memoizedCache] = target[memoizedCache] || new ObjectWithoutPrototypeCache();
 
   descriptor[fType] = function() {
+    this[memoizedCache] = this[memoizedCache] || Object.create(null);
     let cacheKey = key;
 
     for (const arg of arguments) {
@@ -39,11 +24,11 @@ module.exports = function(target, key, descriptor) {
       );
     }
 
-    if (!this[memoizedCache].has(cacheKey)) {
-      this[memoizedCache].set(cacheKey, fn.apply(this, arguments));
+    if (!(cacheKey in this[memoizedCache])) {
+      this[memoizedCache][cacheKey] = fn.apply(this, arguments);
     }
 
-    return this[memoizedCache].get(cacheKey);
+    return this[memoizedCache][cacheKey];
   };
 
   return descriptor;
