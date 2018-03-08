@@ -1,36 +1,49 @@
+
+function ObjectWithoutPrototypeCache () {
+  this.cache = Object.create(null);
+}
+
+ObjectWithoutPrototypeCache.prototype.has = function(key) {
+  return (key in this.cache);
+};
+
+ObjectWithoutPrototypeCache.prototype.get = function(key) {
+  return this.cache[key];
+};
+
+ObjectWithoutPrototypeCache.prototype.set = function(key, value) {
+  this.cache[key] = value;
+};
+
 module.exports = function(target, key, descriptor) {
   const fType  = descriptor.get ? 'get' : 'value';
   const fn    = descriptor[fType];
   const char0 = String.fromCharCode(0);
+  const memoizedCache = Symbol.for('memoizedCache');
+  target[memoizedCache] = target[memoizedCache] || new ObjectWithoutPrototypeCache();
 
-  descriptor[fType] = function(){
-    const keyAry = [];
-    const memoizedCache = Symbol.for('memoizedCache');
+  descriptor[fType] = function() {
+    let cacheKey = key;
 
-    this[memoizedCache] = this[memoizedCache] || {};
-
-    for (let i=0, l=arguments.length; i<l; i++) {
-      const arg  = arguments[i];
+    for (const arg of arguments) {
       const type = typeof arg;
 
-      keyAry.push(
-        (arg  === null)                     ? char0 + 'null'              :
-        (arg  === void 0)                   ? char0 + 'undefined'         :
-        (type === 'function')               ? char0 + arg                 :
-        (type === 'object' && arg.id)       ? char0 + arg.id              :
-        (type === 'object' && arg.hashCode) ? char0 + arg.hashCode()      :
-        (type === 'object')                 ? char0 + JSON.stringify(arg) :
+      cacheKey += char0 + (
+        (arg  === null)                     ? 'null'              :
+        (arg  === void 0)                   ? 'undefined'         :
+        (type === 'function')               ? arg                 :
+        (type === 'object' && arg.id)       ? arg.id              :
+        (type === 'object' && arg.hashCode) ? arg.hashCode()      :
+        (type === 'object')                 ? JSON.stringify(arg) :
         arg
       );
     }
 
-    const cacheKey = key + keyAry.join(String.fromCharCode(0));
-
-    if (!this[memoizedCache].hasOwnProperty(cacheKey)) {
-      this[memoizedCache][cacheKey] = fn.apply(this, arguments);
+    if (!this[memoizedCache].has(cacheKey)) {
+      this[memoizedCache].set(cacheKey, fn.apply(this, arguments));
     }
 
-    return this[memoizedCache][cacheKey];
+    return this[memoizedCache].get(cacheKey);
   };
 
   return descriptor;
